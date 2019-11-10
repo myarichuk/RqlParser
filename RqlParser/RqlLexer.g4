@@ -6,8 +6,10 @@ ARROW_RIGHT: '->';
 ARROW_LEFT: '<-';
 
 DOT : '.';
-OPEN_PAR : '(';
-CLOSE_PAR : ')';
+OPEN_PAREN : '(';
+CLOSE_PAREN : ')';
+OPEN_BRACKET: '[';
+CLOSE_BRACKET: ']';
 COMMA : ',';
 ASSIGN : '=';
 STAR : '*';
