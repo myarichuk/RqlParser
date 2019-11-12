@@ -19,30 +19,34 @@ expressionList:
 	|	COMMA { NotifyErrorListeners(_input.Lt(-1),"Missing expression at the start of the list (before the first ',')", null); } expression ((COMMA | { NotifyErrorListeners(_input.Lt(-1),"Missing ','", null); }) expression)*
 	;
 	 
-expression:
+expression
+	locals [ bool IsErrored ]
+		:
 			literal #LiteralExpression
 		|   PARAMETER #ParemeterExpression
 		|   IDENTIFIER #IdentifierExpression
 		|   instance = IDENTIFIER 
-				( OPEN_BRACKET CLOSE_BRACKET |
-				  OPEN_BRACKET { NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null); } |
-				  CLOSE_BRACKET { NotifyErrorListeners(_input.Lt(-1),"Missing '['", null); } 
-				)
-				#CollectionReferenceExpression
-		|   instance = IDENTIFIER 
+						(
 						OPEN_BRACKET
 							indexer = expression 
-						CLOSE_BRACKET #CollectionIndexerExpression
-					   |
-					   IDENTIFIER
+						CLOSE_BRACKET
+						|
 						OPEN_BRACKET
 							indexer = expression
-						{ NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null); } #CollectionIndexerMissingClosingExpression
-					   |
-					   IDENTIFIER
-						{ NotifyErrorListeners(_input.Lt(-1),"Missing '['", null); }
+						{ NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null); $IsErrored = true;}
+						|
+						{ NotifyErrorListeners(_input.Lt(-1),"Missing '['", null); $IsErrored = true;}
 							indexer = expression
-						CLOSE_BRACKET #CollectionIndexerMissingOpenExpression
+						CLOSE_BRACKET
+						) #CollectionIndexerExpression
+		|
+			instance = 				
+				IDENTIFIER 
+				( OPEN_BRACKET CLOSE_BRACKET |
+				  OPEN_BRACKET { NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null);} |
+				  CLOSE_BRACKET { NotifyErrorListeners(_input.Lt(-1),"Missing '['", null);} 
+				)
+				#CollectionReferenceExpression
 		|   instance = expression DOT field = expression #MemberExpression
 		|   functionName = IDENTIFIER OPEN_PAREN expressionList? CLOSE_PAREN #MethodExpression
 		;

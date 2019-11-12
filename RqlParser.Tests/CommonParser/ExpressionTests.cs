@@ -135,11 +135,10 @@ namespace RqlParser.Tests.CommonParser
             parser.AddErrorListener(errorListener);
             var parseResult = parser.expression();
 
-            Assert.IsType<RqlParser.CollectionIndexerMissingOpenExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.CollectionIndexerExpressionContext>(parseResult);
             Assert.Single(errorListener.Errors);
             Assert.Contains("'['", errorListener.Errors[0].Message);
             Assert.Equal("foo", errorListener.Errors[0].OffendingSymbol.Text);
-            
         }
 
         [Fact]
@@ -154,7 +153,7 @@ namespace RqlParser.Tests.CommonParser
             Assert.Single(errorListener.Errors);
             Assert.Contains("']'", errorListener.Errors[0].Message);
             Assert.Equal("foo", errorListener.Errors[0].OffendingSymbol.Text);
-            Assert.IsType<RqlParser.CollectionIndexerMissingClosingExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.CollectionIndexerExpressionContext>(parseResult);
         }
     }
 }
