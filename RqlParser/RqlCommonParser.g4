@@ -20,33 +20,31 @@ expressionList:
 	;
 	 
 expression
-	locals [ bool IsErrored ]
 		:
 			literal #LiteralExpression
-		|   PARAMETER #ParemeterExpression
-		|   IDENTIFIER #IdentifierExpression
-		|   instance = IDENTIFIER 
-						(
-						OPEN_BRACKET
-							indexer = expression 
-						CLOSE_BRACKET
-						|
-						OPEN_BRACKET
-							indexer = expression
-						{ NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null); $IsErrored = true;}
-						|
-						{ NotifyErrorListeners(_input.Lt(-1),"Missing '['", null); $IsErrored = true;}
-							indexer = expression
-						CLOSE_BRACKET
-						) #CollectionIndexerExpression
-		|
-			instance = 				
+		|   parameter #ParemeterExpression
+		|   identifier #IdentifierExpression
+		|   instance = 				
 				IDENTIFIER 
 				( OPEN_BRACKET CLOSE_BRACKET |
 				  OPEN_BRACKET { NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null);} |
 				  CLOSE_BRACKET { NotifyErrorListeners(_input.Lt(-1),"Missing '['", null);} 
 				)
 				#CollectionReferenceExpression
+		|   instance = IDENTIFIER 
+						(
+						OPEN_BRACKET
+							(literal | parameter | identifier | { NotifyErrorListeners(_input.Lt(-1),"RQL supports only literals, paremeters or identifiers as indexer values", null);})
+						CLOSE_BRACKET
+						|
+						OPEN_BRACKET
+							(literal | parameter | identifier | { NotifyErrorListeners(_input.Lt(-1),"RQL supports only literals, paremeters or identifiers as indexer values", null);})
+						{ NotifyErrorListeners(_input.Lt(-1),"Missing ']'", null);}
+						|
+						{ NotifyErrorListeners(_input.Lt(-1),"Missing '['", null);}
+							(literal | parameter | identifier | { NotifyErrorListeners(_input.Lt(-1),"RQL supports only literals, paremeters or identifiers as indexer values", null);})
+						CLOSE_BRACKET
+						) #CollectionIndexerExpression		
 		|   instance = expression DOT field = expression #MemberExpression
 		|   functionName = IDENTIFIER OPEN_PAREN expressionList? CLOSE_PAREN #MethodExpression
 		;
@@ -68,6 +66,9 @@ literalList:
 				)*
 	|	COMMA { NotifyErrorListeners(_input.Lt(-1),"Missing a value at the start of the list (before the first ',')", null); } literal ((COMMA | { NotifyErrorListeners(_input.Lt(-1),"Missing ','", null); }) literal)*
 	;
+
+parameter: PARAMETER;
+identifier: IDENTIFIER;
 
 literal:
 		BOOLEAN_LITERAL #Boolean

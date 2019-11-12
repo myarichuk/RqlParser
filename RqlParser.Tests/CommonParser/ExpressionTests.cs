@@ -138,7 +138,7 @@ namespace RqlParser.Tests.CommonParser
             Assert.IsType<RqlParser.CollectionIndexerExpressionContext>(parseResult);
             Assert.Single(errorListener.Errors);
             Assert.Contains("'['", errorListener.Errors[0].Message);
-            Assert.Equal("foo", errorListener.Errors[0].OffendingSymbol.Text);
+            Assert.Equal("foobar", errorListener.Errors[0].OffendingSymbol.Text);
         }
 
         [Fact]
