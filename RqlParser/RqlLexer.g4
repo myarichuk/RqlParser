@@ -4,8 +4,10 @@ channels { ERROR }
 //operators
 ARROW_RIGHT: '->';
 ARROW_LEFT: '<-';
-
+COLON: ':';
 DOT : '.';
+OPEN_CURLY: '{';
+CLOSE_CURLY: '}';
 OPEN_PAREN : '(';
 CLOSE_PAREN : ')';
 OPEN_BRACKET: '[';

@@ -80,7 +80,7 @@ namespace RqlParser.Tests.CommonParser
             var parseResult = parser.expression();
 
             Assert.Empty(errorListener.Errors);
-            Assert.IsType<RqlParser.ParemeterExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.RqlParemeterExpressionContext>(parseResult);
         }
         
         [Fact]
@@ -93,7 +93,7 @@ namespace RqlParser.Tests.CommonParser
             var parseResult = parser.expression();
 
             Assert.Empty(errorListener.Errors);
-            Assert.IsType<RqlParser.CollectionReferenceExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.RqlCollectionReferenceExpressionContext>(parseResult);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace RqlParser.Tests.CommonParser
             Assert.Single(errorListener.Errors);
             Assert.Contains("'['", errorListener.Errors[0].Message);
             Assert.Equal("]", errorListener.Errors[0].OffendingSymbol.Text);
-            Assert.IsType<RqlParser.CollectionReferenceExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.RqlCollectionReferenceExpressionContext>(parseResult);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace RqlParser.Tests.CommonParser
             Assert.Single(errorListener.Errors);
             Assert.Contains("']'", errorListener.Errors[0].Message);
             Assert.Equal("[", errorListener.Errors[0].OffendingSymbol.Text);
-            Assert.IsType<RqlParser.CollectionReferenceExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.RqlCollectionReferenceExpressionContext>(parseResult);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace RqlParser.Tests.CommonParser
             parser.AddErrorListener(errorListener);
             var parseResult = parser.expression();
 
-            Assert.IsType<RqlParser.CollectionIndexerExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.RqlCollectionIndexerExpressionContext>(parseResult);
             Assert.Single(errorListener.Errors);
             Assert.Contains("'['", errorListener.Errors[0].Message);
             Assert.Equal("foobar", errorListener.Errors[0].OffendingSymbol.Text);
@@ -153,7 +153,7 @@ namespace RqlParser.Tests.CommonParser
             Assert.Single(errorListener.Errors);
             Assert.Contains("']'", errorListener.Errors[0].Message);
             Assert.Equal("foo", errorListener.Errors[0].OffendingSymbol.Text);
-            Assert.IsType<RqlParser.CollectionIndexerExpressionContext>(parseResult);
+            Assert.IsType<RqlParser.RqlCollectionIndexerExpressionContext>(parseResult);
         }
     }
 }

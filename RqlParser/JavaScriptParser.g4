@@ -336,12 +336,12 @@ singleExpression
     | singleExpression (LessThan | MoreThan | LessThanEquals | GreaterThanEquals) singleExpression           # RelationalExpression
     | singleExpression Instanceof singleExpression                          # InstanceofExpression
     | singleExpression In singleExpression                                  # InExpression
-    | singleExpression ('==' | '!=' | '===' | '!==') singleExpression       # EqualityExpression
+    | singleExpression (Equals_ | NotEquals | IdentityEquals | IdentityNotEquals) singleExpression       # EqualityExpression
     | singleExpression BitAnd singleExpression                                 # BitAndExpression
-    | singleExpression '^' singleExpression                                 # BitXOrExpression
+    | singleExpression BitXOr singleExpression                                 # BitXOrExpression
     | singleExpression BitOr singleExpression                                 # BitOrExpression
-    | singleExpression '&&' singleExpression                                # LogicalAndExpression
-    | singleExpression '||' singleExpression                                # LogicalOrExpression
+    | singleExpression And singleExpression                                # LogicalAndExpression
+    | singleExpression Or singleExpression                                # LogicalOrExpression
     | singleExpression QuestionMark singleExpression Colon singleExpression            # TernaryExpression
     | <assoc=right> singleExpression Assign singleExpression                   # AssignmentExpression
     | <assoc=right> singleExpression assignmentOperator singleExpression    # AssignmentOperatorExpression
@@ -366,7 +366,7 @@ assignable
 anoymousFunction
     : functionDeclaration                                                       # FunctionDecl
     | Async? Function Multiply? OpenParen formalParameterList? CloseParen OpenBrace functionBody CloseBrace    # AnoymousFunctionDecl
-    | Async? arrowFunctionParameters '=>' arrowFunctionBody                     # ArrowFunction
+    | Async? arrowFunctionParameters ARROW arrowFunctionBody                     # ArrowFunction
     ;
 
 arrowFunctionParameters
@@ -380,18 +380,18 @@ arrowFunctionBody
     ;
 
 assignmentOperator
-    : '*='
-    | '/='
-    | '%='
-    | '+='
-    | '-='
-    | '<<='
-    | '>>='
-    | '>>>='
-    | '&='
-    | '^='
-    | '|='
-    | '**='
+    : MultiplyAssign
+    | DivideAssign
+    | ModulusAssign
+    | PlusAssign
+    | MinusAssign
+    | LeftShiftArithmeticAssign
+    | RightShiftArithmeticAssign
+    | RightShiftLogicalAssign
+    | BitAndAssign
+    | BitXorAssign
+    | BitOrAssign
+    | PowerAssign
     ;
 
 literal
